@@ -19,7 +19,8 @@ utility.map = function (line){
     return record
 }
 utility.eligible = function(record){
-    return record.institutionCode != '' &&
+    return record.id != '' &&
+        record.institutionCode != '' &&
         record.recordedBy != '' &&
         record.eventDate != '' &&
         record.year != ''
