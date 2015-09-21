@@ -51,4 +51,10 @@ function differentInstitution(record,records_){
 ```
 var possibleDuplications = bd.run()
 console.log(possibleDuplications)
+
+/*
+Console output:
+[ [ { id: 1, year: 1995, startDayOfYear: 129, collector: 'Allan' },
+      { id: 9, year: 1995, startDayOfYear: 129, collector: 'Allan' } ] ]
+*/
 ```
