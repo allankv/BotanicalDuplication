@@ -1,6 +1,7 @@
 /**
  * Created by allan on 20/09/15.
  */
+var events = require('events')
 
 var id_
 function BotanicalDuplication(){
@@ -16,6 +17,7 @@ function runClusters(config){
     var clusterOutputs = []
     var currentInput
     config.clusters.forEach(function(cluster){
+        console.time("Process "+cluster.field)
         if(clusterOutputs.length==0){
             currentInput = config.input
         }
@@ -30,15 +32,17 @@ function runClusters(config){
                 clusterOutputs[clusterOutputs.length-1] = clusterOutputs[clusterOutputs.length-1].concat(output)
                 currentInput = clusterOutputs[clusterOutputs.length-1]
             })
+        console.timeEnd("Process " + cluster.field)
     })
     return clusterOutputs[clusterOutputs.length-1].reduce(removeDuplicatedGroups,[])
 }
-
+var count = 0
 function groupingBySimilarity(input,similarity,field,id,callback){
     var isGroup = Array.isArray(input[0])
     if(isGroup == false) {
         var output = []
         input.forEach(function (record) {
+
             var existentGroup = false
             output.forEach(function (g) {
                 if (g[0][field]== record[field]) {
@@ -50,7 +54,8 @@ function groupingBySimilarity(input,similarity,field,id,callback){
                 addInASimilarGroup(record, input, output, similarity,id)
             }
         })
-        callback(output.filter(filterGroupsWithNoDuplication).reduce(removeDuplicatedGroups,[]))
+        callback(output.filter(filterGroupsWithNoDuplication))
+
     } else{
         input.forEach(function(group){
             groupingBySimilarity(group, similarity, field,id, callback)
