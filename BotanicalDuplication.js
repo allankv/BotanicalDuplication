@@ -1,6 +1,7 @@
 /**
  * Created by allan on 20/09/15.
  */
+
 var events = require('events')
 
 var id_

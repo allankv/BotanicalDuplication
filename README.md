@@ -1,5 +1,6 @@
 # BotanicalDuplication
 
+
 ```
 var BotanicalDuplication = require("./BotanicalDuplication.js")
 ```
@@ -18,6 +19,7 @@ var dataset = [
     {id:9, year: 1995, startDayOfYear: 129, collector: "Allan"},
 ]
 ```
+
 2. Define similarity functions
 ========================
 ```
@@ -32,11 +34,13 @@ function differentInstitution(record,records_){
 }
 ```
 3. Define an instance
+
 ========================
 ```
 var bd = new BotanicalDuplication()
 ```
-4. Set configuration
+
+4. Define similarity functions
 ========================
 ```
 bd.config = {
@@ -60,6 +64,7 @@ Console output:
 [ [ { id: 1, year: 1995, startDayOfYear: 129, collector: 'Allan' },
       { id: 9, year: 1995, startDayOfYear: 129, collector: 'Allan' } ] ]
 */
+
 ```
 Save file "js" extension: e.g. identify.js
 Install Node.JS: https://nodejs.org/en/
@@ -69,3 +74,6 @@ Run in terminal:
 ```
 node indentify.js
 ```
+=======
+```
+
