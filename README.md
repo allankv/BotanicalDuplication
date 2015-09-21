@@ -18,25 +18,7 @@ var dataset = [
     {id:9, year: 1995, startDayOfYear: 129, collector: "Allan"},
 ]
 ```
-2. Define an instance
-========================
-```
-var bd = new BotanicalDuplication()
-```
-3. Set configuration
-========================
-```
-bd.config = {
-    input: dataset,                                         // JSON list
-    id: "id",                                               // Name of field that is an unique identifier for each item in list
-    clusters: [                                             // Define fields for being grouped
-        {field:"year", similarity: sameYear},               // Each item should the name of the field and an function which return true if the value of the field is considered similar
-        {field:"startDayOfYear", similarity: similarDay},
-        {field:"collector", similarity: sameCollector}
-    ]
-}
-```
-4. Define similarity functions
+2. Define similarity functions
 ========================
 ```
 function sameYear(record,records_){
@@ -47,6 +29,24 @@ function similarDay(record,records_){
 }
 function differentInstitution(record,records_){
     return record.institution != record_.institution
+}
+```
+3. Define an instance
+========================
+```
+var bd = new BotanicalDuplication()
+```
+4. Set configuration
+========================
+```
+bd.config = {
+    input: dataset,                                         // JSON list
+    id: "id",                                               // Name of field that is an unique identifier for each item in list
+    clusters: [                                             // Define fields for being grouped
+        {field:"year", similarity: sameYear},               // Each item should the name of the field and an function which return true if the value of the field is considered similar
+        {field:"startDayOfYear", similarity: similarDay},
+        {field:"collector", similarity: sameCollector}
+    ]
 }
 ```
 5. Run

@@ -3,40 +3,84 @@
  */
 var csv = require('fast-csv')
 var fs = require('fs')
-var dataset = []
 function DatasetUtility(){
-
+    this.dataset = []
+    this.rawData = []
     this.inputFile
     this.outputFile
     this.map
     this.eligible
     this.count = 0
-    this.limit = 2000000
+    this.limit = 10000
     this.getDatasetFromDwCA = function(callback){
         console.time("Load")
-        return run (this.map,this.eligible, this.limit, callback)
+        return run (this, callback)
+    }
+    this.writeGroups = function(groups){
+        return writeGroups(groups,this.outputFile)
+    }
+    this.writeDuplicated= function(groups){
+        return writeDuplicated(groups,this.rawData,this.outputFile)
     }
 }
 
-function run(map, eligible, limit, callback){
-    var count = 0
-    fs.createReadStream("nybg.csv").pipe(csv(
+function run(config, callback){
+    config.count
+    fs.createReadStream(config.inputFile).pipe(csv(
         {delimiter:'\t',quote:null}
     )).on("data", function (line) {
-        this.count++
-        var record = map(line)
-        if (eligible(record)){
-            dataset.push(record)
-            if(limit < count){
+        config.rawData.push(line)
+        var record = config.map(line,config.rawData[0])
+        if (config.eligible(record)){
+            config.dataset.push(record)
+            if(config.limit < config.count+1){
                 this.emit("end")
             }
-            count++
+            config.count++
         }
     })
         .on("end", function () {
             console.timeEnd("Load")
-            callback(dataset)
+            callback(config.dataset)
             this.emit("close")
         })
+}
+function writeGroups(groups,output,callback){
+    var ws = fs.createWriteStream(output)
+    var data = []
+    var headers = Object.create(groups[0][0])
+    for(var key in headers){
+        headers[key] = "-";
+    }
+    headers.id = "Possible duplications:"
+
+    groups.forEach(function(group){
+        data.push(headers)
+        group.forEach(function(record){
+            data.push(record)
+        })
+    })
+    csv.write(data, {headers: true}).pipe(ws)
+    callback
+}
+function writeDuplicated(groups,raw,output){
+    var ws = fs.createWriteStream(output)
+    var data = []
+    var headers = Object.create(raw[0])
+    headers[0] = "Possible duplications:"
+
+    groups.forEach(function(group){
+        data.push(headers)
+        group.forEach(function(record){
+            raw.forEach(function(line){
+                if(line[0]==record.id){
+                    data.push(line)
+                    return
+                }
+
+            })
+        })
+    })
+    csv.write(data, {headers: true}).pipe(ws)
 }
 module.exports = DatasetUtility
