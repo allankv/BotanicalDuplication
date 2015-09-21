@@ -2,6 +2,7 @@
 
 1. Define input
 ========================
+```
 var dataset = [
     {id:1, year: 1995, startDayOfYear: 129, collector: "Allan"},
     {id:2, year: 2004, startDayOfYear: 27, collector: "Allan"},
@@ -13,13 +14,15 @@ var dataset = [
     {id:8, year: 2001, startDayOfYear: 129, collector: "James"},
     {id:9, year: 1995, startDayOfYear: 129, collector: "Allan"},
 ]
-
+```
 2. Define an instance
 ========================
+```
 var bd = new BotanicalDuplication()
-
+```
 3. Set configuration
 ========================
+```
 bd.config = {
     input: dataset,                                         // JSON list
     id: "id",                                               // Name of field that is an unique identifier for each item in list
@@ -29,9 +32,10 @@ bd.config = {
         {field:"collector", similarity: sameCollector}
     ]
 }
-
+```
 4. Define similarity functions
 ========================
+```
 function sameYear(record,records_){
     return record.year == record_.year
 }
@@ -41,8 +45,10 @@ function similarDay(record,records_){
 function differentInstitution(record,records_){
     return record.institution != record_.institution
 }
-
+```
 5. Run
 ========================
+```
 var possibleDuplications = bd.run()
 console.log(possibleDuplications)
+```
