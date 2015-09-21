@@ -1,11 +1,16 @@
 /**
  * Created by allan on 20/09/15.
  */
+
+var id_
 function BotanicalDuplication(){
     this.config = {}
     this.config.id = "id"
     this.clusters = []
-    this.run = function(){return runClusters(this.config)}
+    this.run = function(){
+        id_ = this.config.id || this.id
+        return runClusters(this.config)
+    }
 }
 function runClusters(config){
     var clusterOutputs = []
@@ -26,7 +31,7 @@ function runClusters(config){
                 currentInput = clusterOutputs[clusterOutputs.length-1]
             })
     })
-    return clusterOutputs[clusterOutputs.length-1]
+    return clusterOutputs[clusterOutputs.length-1].reduce(removeDuplicatedGroups,[])
 }
 
 function groupingBySimilarity(input,similarity,field,id,callback){
@@ -73,7 +78,7 @@ function removeDuplicatedGroups(history, current){
     history.forEach(function(item){
         item.forEach(function(record){
             current.forEach(function(record_){
-                if(record_.id==record.id){
+                if(record_[id_]==record[id_]){
                     equalsCountig++
                     return
                 }

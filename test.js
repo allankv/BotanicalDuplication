@@ -3,41 +3,37 @@
  */
 var BotanicalDuplication = require("./BotanicalDuplication.js")
 
-var testList = [
-    {id:1,v:2, v2: 9, v3: 2},
-    {id:2,v:5, v2: 5, v3: 9},
-    {id:3,v:7, v2: 9, v3: 9},
-    {id:4,v:3, v2: 2, v3: 9},
-    {id:5,v:6, v2: 9, v3: 9},
-    {id:6,v:4, v2: 1, v3: 9},
-    {id:7,v:8, v2: 9, v3: 9},
-    {id:8,v:4, v2: 7, v3: 9},
-    {id:9,v:3, v2: 9, v3: 9},
-    {id:10,v:8, v2: 9, v3: 9},
-    {id:11,v:3, v2: 2, v3: 9},
-    {id:12,v:2, v2: 9, v3: 3},
-    {id:13,v:0, v2: 9, v3: 9}]
+var dataset = [
+    {id:1, year: 1995, startDayOfYear: 129, collector: "Allan"},
+    {id:2, year: 2004, startDayOfYear: 27, collector: "Allan"},
+    {id:3, year: 1995, startDayOfYear: 128, collector: "Bob"},
+    {id:4, year: 2004, startDayOfYear: 27, collector: "Bob"},
+    {id:5, year: 2007, startDayOfYear: 89, collector: "Paul"},
+    {id:6, year: 1995, startDayOfYear: 129, collector: "Paul"},
+    {id:7, year: 2007, startDayOfYear: 78, collector: "James"},
+    {id:8, year: 2001, startDayOfYear: 129, collector: "James"},
+    {id:9, year: 1995, startDayOfYear: 129, collector: "Allan"},
+]
 
 var bd = new BotanicalDuplication()
 
-function sim(r,r_){
-    return r.v==r_.v || r.v==r_.v+1 || r.v==r_.v-1
-}
-function sim2(r,r_){
-    return r.v2==r_.v2 || r.v2==r_.v2+1 || r.v2==r_.v2-1
-}
-function sim3(r,r_){
-    return r.v3!=r_.v3
-}
-
 bd.config = {
-    input: testList,
-    id: "id",
-    clusters: [
-        {field:"v", similarity:sim},
-        {field:"v2", similarity:sim2},
-        {field:"v3", similarity:sim3}
+    input: dataset,                                         // JSON list
+    id: "id",                                               // Name of field that is an unique identifier for each item in list
+    clusters: [                                             // Define fields for being grouped
+        {field:"year", similarity: sameYear},               // Each item should the name of the field and an function which return true if the value of the field is considered similar
+        {field:"startDayOfYear", similarity: similarDay},
+        {field:"collector", similarity: sameCollector}
     ]
+}
+function sameYear(record,record_){
+    return record.year == record_.year
+}
+function similarDay(record,record_){
+    return record.startDayOfYear  == record_.startDayOfYear || record.startDayOfYear  == record_.startDayOfYear+1 || record.startDayOfYear  == record_.startDayOfYear-1
+}
+function sameCollector(record,record_){
+    return record.collector == record_.collector
 }
 
 console.log(bd.run())
