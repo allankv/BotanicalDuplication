@@ -1,0 +1,7 @@
+{ "name": "BotanicalDuplication",
+  "author": "Allan Koch Veiga",
+  "version": "0.0.1",
+  "description": "Botanical Duplications Identification",
+  "main":"BotanicalDuplication",
+  "dependencies" : {}
+}
